@@ -4,7 +4,7 @@ description: |
   워크플로 디버그에 편리하다.
 inputs:
   enable-context:
-    default: 'true'
+    default: "true"
     required: false
     description: 콘텍스트 로그 출력 여부
 outputs:
@@ -23,5 +23,5 @@ runs:
         CONTEXT: ${{ toJSON(github) }}
       shell: bash
     - id: current
-      run: echo "date=${date}" >> "${GITHUB_OUTPUT}"
+      run: echo "date=$(date)" >> "${GITHUB_OUTPUT}"
       shell: bash
