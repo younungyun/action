@@ -1,0 +1,35 @@
+name: Reusable workflows
+on:
+  workflow_call:
+    inputs:
+      pr-number:
+        type: string
+        default: ${{ github.event.pull_request.number }}
+        required: false
+        description: 풀 리퀘스트 번호
+    secrets:
+      token:
+        required: true
+        description: 깃허브 토큰
+    outputs:
+      message:
+        value: ${{ jobs.comment.outputs.pr-comment }}
+        description: 메시지
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-request: white
+    steps:
+      - uses: actions/checkout@v4
+      - id: pr-comment
+        run: |
+          body="Welcome, ${GITHUB_ACTOR}"
+          gh pr comment "${PR_NUMBER}" --body "${body}"
+          echo "body=${body}" >> "${GITHUB_OUTPUT}"
+        env:
+          PR_NUMBER: ${{ inputs.pr-number }}
+          GITHUB_TOKEN: ${{ secrets.token }}
+    outputs:
+      pr-comment: ${{ steps.pr-comment.outputs.body }}
